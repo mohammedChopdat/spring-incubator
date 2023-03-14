@@ -23,6 +23,7 @@
         <module>customer-service</module>
         <module>notification-service</module>
         <module>loyalty-service</module>
+        <module>booking-service</module>
     </modules>
 
     <properties>
@@ -63,7 +64,9 @@
                 <version>${springsecurity.version}</version>
             </dependency>
 
-            <!-- Lombok -->
+
+
+
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
@@ -120,7 +123,14 @@
                 <version>${h2.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.springdoc</groupId>
+                <artifactId>springdoc-openapi-ui</artifactId>
+                <version>1.6.4</version>
+            </dependency>
         </dependencies>
+
+
     </dependencyManagement>
 
     <dependencies>
@@ -128,6 +138,11 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <scope>runtime</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+            <version>1.6.4</version>
         </dependency>
     </dependencies>
 

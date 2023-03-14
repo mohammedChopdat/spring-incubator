@@ -9,7 +9,8 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create
-
+  h2:
+    console.enabled: true
 server:
   port: 8201
   error:

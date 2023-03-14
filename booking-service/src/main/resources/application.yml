@@ -1,0 +1,38 @@
+spring:
+  application:
+    name: booking-service
+  datasource:
+    driver-class-name: org.hsqldb.jdbc.JDBCDriver
+    url: jdbc:hsqldb:mem:testdb;DB_CLOSE_DELAY=-1
+    username: sa
+    password:
+  jpa:
+    hibernate:
+      ddl-auto: create
+
+    spring:
+      jms:
+        pub-sub-domain: true
+  activemq:
+    broker-url: tcp://localhost:61616
+    password: admin
+    user: admin
+#spring.activemq.broker-url: tcp://localhost:61616
+#spring.activemq.user: admin
+#spring.activemq.password: admin
+
+server:
+  port: 8201
+  error:
+    include-message: always
+
+loyalty:
+  discount:
+    flights:
+      selection:
+        futureDays: 365
+      limit: 5
+    fares:
+      rate: 0.8
+
+

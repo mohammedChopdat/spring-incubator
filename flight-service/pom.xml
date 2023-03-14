@@ -38,7 +38,12 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-cache</artifactId>
         </dependency>
-
+<!--        <dependency>-->
+<!--            <groupId>entelect.training.incubator.spring.loyalty</groupId>-->
+<!--            <artifactId>loyalty-service</artifactId>-->
+<!--            <version>0.1.0-SNAPSHOT</version>-->
+<!--            <scope>compile</scope>-->
+<!--        </dependency>-->
         <!-- HyperSQL -->
         <dependency>
             <groupId>org.hsqldb</groupId>
