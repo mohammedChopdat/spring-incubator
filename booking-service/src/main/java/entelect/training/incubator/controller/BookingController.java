@@ -1,17 +1,18 @@
 package entelect.training.incubator.controller;
 
-import com.baeldung.springsoap.client.gen.CaptureRewardsRequest;
 import com.baeldung.springsoap.client.gen.CaptureRewardsResponse;
 import com.baeldung.springsoap.client.gen.RewardsBalanceResponse;
+import entelect.training.incubator.client.LoyaltyClient;
 import entelect.training.incubator.model.Booking;
 import entelect.training.incubator.model.SearchBooking;
 import entelect.training.incubator.service.BookingsService;
 
+import entelect.training.incubator.service.PublishMessageService;
 import entelect.training.incubator.spring.customer.model.Customer;
 import entelect.training.incubator.spring.customer.service.CustomersService;
 import entelect.training.incubator.spring.flight.model.Flight;
-import entelect.training.incubator.spring.loyalty.client.LoyaltyClient;
-import entelect.training.incubator.spring.loyalty.server.RewardsServiceImpl;
+
+import entelect.training.incubator.spring.notification.model.MessageDto;
 import entelect.training.incubator.spring.notification.sms.client.impl.MoloCellSmsClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -33,7 +34,8 @@ public class BookingController {
     private final BookingsService bookingsService;
     private final CustomersService customersService;
 
-    private final RewardsServiceImpl rewardsService;
+//    private final RewardsServiceImpl rewardsService;
+    private final PublishMessageService publishMessageService;
 
     private final MoloCellSmsClient moloCellSmsClient;
 
@@ -43,12 +45,14 @@ public class BookingController {
 
 
     @Autowired
-    public BookingController(BookingsService bookingsService, CustomersService customersService, RewardsServiceImpl rewardsService, MoloCellSmsClient moloCellSmsClient, LoyaltyClient client) {
+    public BookingController(BookingsService bookingsService, CustomersService customersService, PublishMessageService publishMessageService, MoloCellSmsClient moloCellSmsClient, LoyaltyClient client) {
         this.bookingsService = bookingsService;
 
         this.customersService = customersService;
-        this.rewardsService = rewardsService;
+        this.publishMessageService = publishMessageService;
+
         this.moloCellSmsClient = moloCellSmsClient;
+        //this.client = client;
         this.client = client;
     }
 
@@ -68,7 +72,7 @@ public class BookingController {
 
     @GetMapping("re/{pass}")
     public ResponseEntity<?> captureRewards(@PathVariable String pass) {
-        CaptureRewardsResponse response = client.captureRewardsRequest("123", BigDecimal.valueOf(100));
+        CaptureRewardsResponse response = client.captureRewardsRequest("1234", BigDecimal.valueOf(100));
 
         if (response != null) {
             LOGGER.trace("Found booking");
@@ -102,7 +106,9 @@ public class BookingController {
                final Booking savedFlight = bookingsService.createBooking(booking);
                Customer customer1 = (Customer) customer;
                Flight flight1 = (Flight)flight;
-               moloCellSmsClient.sendSms(customer1.getPhoneNumber(),"Hello your booking is confirmed");
+               MessageDto messageDto = new MessageDto(customer1.getPhoneNumber(),"hello");
+               publishMessageService.sendMessage("flight","messageDto");
+             //  moloCellSmsClient.sendSms(customer1.getPhoneNumber(),);
                BigDecimal cost = BigDecimal.valueOf(flight1.getSeatCost());
                BigDecimal rewards = cost.add(client.rewardsBalance(customer1.getPassportNumber()).getBalance());
                client.captureRewardsRequest(customer1.getPassportNumber(),rewards);
